@@ -1,0 +1,61 @@
+version: "3.7"
+
+services:
+  nvclouds-official-api:
+    env_file:
+      - .env
+    image: ${LOCAL_IMAGE}
+    container_name: ${LOCAL_CONTAINER_NAME}
+    volumes:
+      - $PWD/${PROJECT_TNAME}/logs/:${LOGGING_FILE_PATH}
+    networks:
+      - ${SHARE_NET}
+    ports:
+      - ${LOCAL_API_PORT}:${LOCAL_CONTAINER_PORT}
+    restart: always
+    depends_on:
+      - mysql
+      - redis
+
+  redis:
+    image: ${REDIS_IMAGE}
+    container_name: ${REDIS_CONTAINER_NAME}
+    networks:
+      - ${SHARE_NET}
+    hostname: redis
+    restart: always
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+    volumes:
+      - $PWD/redis/conf/redis.conf:/etc/redis/redis.conf:rw
+      - $PWD/redis/data:/data:rw
+    command:
+      redis-server /etc/redis/redis.conf --appendonly yes
+    privileged: true
+    environment:
+      - TZ=Asia/Shanghai
+      - LANG=en_US.UTF-8
+
+  mysql:
+    image: ${MYSQL_IMAGE}
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+    volumes:
+      - $PWD/mysql/conf:/etc/mysql/conf.d
+      - $PWD/mysql/logs:/logs
+      - $PWD/mysql/data:/var/lib/mysql
+    container_name: ${MYSQL_CONTAINER_NAME}
+    networks:
+      - ${SHARE_NET}
+    ports:
+      - ${MYSQL_PORT}:${MYSQL_PORT}
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+
+
+
+networks:
+  localnet:
+    external:
+      name: localnet

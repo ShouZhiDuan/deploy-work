@@ -1,0 +1,57 @@
+version: "3.7"
+
+networks:
+  localnet:
+    external:
+      name: localnet
+
+services:
+  ra-client:
+    image: "registry.cn-hangzhou.aliyuncs.com/dsz-docker/nvxcloudsraclient:v1.1"
+    environment:
+      - REDIS_HOST=192.168.10.10
+      - REDIS_PORT=6379
+      - DSGX_REMOTE_ATTESTATION_HOST=ra-server
+      - DSGX_REMOTE_ATTESTATION_PORT=8909
+      - BYPASS_IAS_VERIFY=ON
+      - NET_TIMEOUT=1
+      - NET_KEEP_ALIVE_INTERVAL=30
+      - MAX_LOG_SIZE=1024
+      - STOP_LOGGING_IF_FULL_DISK=ON
+      - CLIENT_ID=65437df8-6453-6543-6543-9af509fb6543
+      - NET_ERROR_MAX_RETRY_TIMES=5
+      - NET_ERROR_MAX_RETRY_INTERVAL=3
+    command: ["./ra-client"]
+    #      depends_on:
+    #        - redis
+    networks:
+      - localnet
+    restart: always
+
+  #    redis:
+  #      image: "redis:alpine"
+  #      command: redis-server
+  #      ports:
+  #        - "6379:6379"
+  #      volumes:
+  #        - ./redis-data:/var/lib/redis
+  #        - ./redis.conf:/usr/local/etc/redis/redis.conf
+  #      environment:
+  #        - REDIS_REPLICATION_MODE=master
+  #      networks:
+  #          - localnet
+
+  ra-server:
+    image: "registry.cn-hangzhou.aliyuncs.com/dsz-docker/nvxcloudsraserver:v1.0.6"
+    #devices:
+    #  - /dev/isgx:/dev/isgx
+    environment:
+      - REDIS_PORT=6379
+      - REDIS_HOST=192.168.10.10
+      - ANALYSIS_DEFAULT_PORT=8909
+      - NUM_THREADS=4
+    command: ["./start.sh"]
+    networks:
+      - localnet
+    restart: always
+

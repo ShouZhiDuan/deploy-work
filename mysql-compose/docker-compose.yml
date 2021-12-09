@@ -1,0 +1,18 @@
+version: '3.7'
+# to see https://www.jb51.net/article/169141.htm 开启mysql远程连接命令
+services:
+  mysql:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=dsz-data-base
+    volumes:
+      - $PWD/conf:/etc/mysql/conf.d
+      - $PWD/logs:/logs
+      - $PWD/data:/var/lib/mysql
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password #这行代码解决无法访问的问题
+    

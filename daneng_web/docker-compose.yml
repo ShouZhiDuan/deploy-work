@@ -1,0 +1,20 @@
+version: "3.7"
+
+networks:
+  localnet:
+    external:
+      name: localnet
+
+services:
+  daneng-web:
+    env_file:
+      - .env
+    image: ${IMAGE_TAG}
+    container_name: daneng-web-server
+    networks:
+      - localnet
+    ports:
+      - ${DANENG_PORT}:${DANENG_PORT}
+    restart: always
+
+

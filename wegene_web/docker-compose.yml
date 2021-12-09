@@ -1,0 +1,18 @@
+version: "3.7"
+
+networks:
+  localnet:
+    external:
+      name: localnet
+
+services:
+  wegene-web:
+    env_file:
+      - .env
+    image: ${IMAGE_TAG}
+    container_name: wegene-web-server
+    networks:
+      - localnet
+    ports:
+      - ${WEGENE_PORT}:${WEGENE_PORT}
+    restart: always
