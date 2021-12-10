@@ -1,0 +1,107 @@
+2020/12/04 03:36:15 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:36:16 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:36:18 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:36:19 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:36:21 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:36:23 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:36:27 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:36:34 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:36:48 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:37:09 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:37:10 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:37:12 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:37:13 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:37:15 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:37:17 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:37:21 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:37:28 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:37:42 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:38:08 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:38:10 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:38:11 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:38:12 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:38:14 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:38:16 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:38:18 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:38:22 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:38:30 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:38:43 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:39:10 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:40:02 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:41:02 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:42:43 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:42:44 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:42:45 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:42:47 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:42:49 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:42:51 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:42:55 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:43:02 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:43:16 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:43:43 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:43:59 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:44:00 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:44:01 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:44:03 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:44:05 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:44:07 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:44:11 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:44:18 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:44:32 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:44:59 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:45:51 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:46:52 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:47:56 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:47:58 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:47:59 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:48:01 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:48:02 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:48:05 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:48:09 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:48:16 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:48:29 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:48:56 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:49:48 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:50:49 [emerg] 1#1: open() "/etc/nginx/nginx.conf" failed (2: No such file or directory)
+2020/12/04 03:56:44 [error] 21#21: *1 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080//task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 03:57:20 [error] 21#21: *1 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080//task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 04:00:50 [error] 21#21: *5 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080//task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 04:00:52 [error] 21#21: *5 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080//task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 04:01:10 [error] 21#21: *5 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080//task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 04:01:12 [error] 21#21: *5 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080//task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 04:01:14 [error] 21#21: *5 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080//task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 04:01:37 [error] 21#21: *5 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080//task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 04:13:19 [error] 21#21: *14 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080//task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 04:41:30 [error] 21#21: *21 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080//task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 04:41:31 [error] 21#21: *21 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080//task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 04:46:38 [error] 21#21: *27 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080//task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 04:46:48 [error] 21#21: *27 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080//task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 04:47:20 [error] 21#21: *27 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080//task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 04:49:42 [error] 21#21: *31 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080//task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 04:55:12 [error] 21#21: *1 connect() failed (111: Connection refused) while connecting to upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://172.18.0.10:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 04:55:33 [error] 21#21: *1 connect() failed (111: Connection refused) while connecting to upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://172.18.0.10:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 04:56:28 [error] 21#21: *1 connect() failed (111: Connection refused) while connecting to upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://172.18.0.10:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 04:57:59 [error] 22#22: *1 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 04:58:01 [error] 22#22: *1 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 04:58:02 [error] 22#22: *1 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 04:58:03 [error] 22#22: *1 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 04:58:03 [error] 22#22: *1 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 04:58:04 [error] 22#22: *1 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 04:58:50 [error] 22#22: *1 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 05:02:05 [error] 22#22: *9 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 05:09:42 [error] 21#21: *1 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 05:09:43 [error] 21#21: *1 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 05:09:47 [error] 21#21: *1 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 05:09:54 [error] 21#21: *1 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 05:10:58 [error] 21#21: *1 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 05:11:31 [error] 21#21: *1 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 05:12:06 [error] 21#21: *1 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 05:19:11 [error] 22#22: *1 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 05:19:33 [error] 22#22: *1 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 05:38:56 [warn] 22#22: *15 upstream sent more data than specified in "Content-Length" header while reading upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 05:39:03 [warn] 22#22: *17 upstream sent more data than specified in "Content-Length" header while reading upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://192.168.10.5:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 05:42:49 [warn] 22#22: *1 upstream sent more data than specified in "Content-Length" header while reading upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://172.18.0.10:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 05:42:55 [warn] 22#22: *3 upstream sent more data than specified in "Content-Length" header while reading upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://172.18.0.10:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 05:43:11 [warn] 22#22: *5 upstream sent more data than specified in "Content-Length" header while reading upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://172.18.0.10:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 05:43:35 [warn] 21#21: *1 upstream sent more data than specified in "Content-Length" header while reading upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://172.18.0.10:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
+2020/12/04 05:52:27 [warn] 21#21: *12 upstream sent more data than specified in "Content-Length" header while reading upstream, client: 192.168.0.110, server: localhost, request: "POST /zihao/task HTTP/1.1", upstream: "http://172.18.0.10:8080/task", host: "192.168.10.5:8787", referrer: "http://192.168.10.5:8787/search/base"
