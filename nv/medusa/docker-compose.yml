@@ -1,0 +1,23 @@
+version: '3'
+
+networks:
+  localnet:
+    external:
+      name: localnet
+      
+services:
+  medusa-study:
+    image: ${STUDY_IMAGE}
+    container_name: ${CONTAINER_NAME}
+    user: root
+    env_file:
+      - .env
+    ports:
+      - ${STUDY_SERVER_PORT}:${STUDY_SERVER_PORT} 
+    volumes:
+      - ./orders:/medusa_study/OptionAPIs/orders
+      - /tmp:/tmp 
+      - /etc/hosts:/etc/hosts #hosts参考当前目录文件
+    networks:
+      - localnet
+    restart: always 

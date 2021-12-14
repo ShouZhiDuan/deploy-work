@@ -1,0 +1,2 @@
+#配置DEEPSEG需要依赖的tensenboad域名，具体映射关系具体配置
+192.168.10.100 cnnresults.nvxclouds.net
