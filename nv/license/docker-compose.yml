@@ -1,0 +1,16 @@
+version: '3'
+networks:
+  localnet:
+    external:
+      name: localnet
+services:
+  medusa-license:
+    image:  ${LICENSE_IMAGE}
+    container_name: ${CONTAINER_NAME}
+    networks:
+      - localnet
+    env_file:
+      - .env
+    ports:
+      - ${LICENSE_SERVER_PORT}:${LICENSE_SERVER_PORT}
+    restart: always
