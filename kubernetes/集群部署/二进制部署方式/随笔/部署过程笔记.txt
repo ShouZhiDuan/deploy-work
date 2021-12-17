@@ -76,38 +76,6 @@ IFS=$OIFS
 
 
 
->>>>>>操作<<<<<<
-#修改coredns配置文件
-kubectl edit cm coredns -n kube-system
-
-#查看所有的pod
-kubectl get pods -A
-
-#查看pod日志
-kubectl logs coredns-5dc5b997f9-2762d -n kube-system
-kubectl get pod coredns-84646c885d-zx2jg --output=yaml --namespace=kube-system
-
-#删除pod
-kubectl delete pod coredns.... -n kube-system
-
-#进入pod内部
-kubectl exec nginx -it -- /bin/bash
-
-#根据标签查询pod
-kubectl get pods -l app=nginx-ds
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #部署问题？
 1、出现
