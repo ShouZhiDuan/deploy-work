@@ -1,0 +1,528 @@
+#原来主机名
+fabric1
+
+hostname node-1
+hostname node-2
+hostname node-3
+
+#证书生成时候设置svc网段IP
+KUBERNETES_SVC_IP=10.129.0.0
+
+#服务器列表数据
+KUBERNETES_SVC_IP=10.233.0.1
+MASTER_IPS=192.168.10.121,192.168.10.122,192.168.10.123
+cfssl gencert \
+  -ca=ca.pem \
+  -ca-key=ca-key.pem \
+  -config=ca-config.json \
+  -hostname=10.233.0.1,192.168.10.121,192.168.10.122,192.168.10.123,127.0.0.1,kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.svc.cluster.local \
+  -profile=kubernetes \
+  kubernetes-csr.json | cfssljson -bare kubernetes
+
+
+
+ETCD_IPS=(192.168.10.121 192.168.10.122 192.168.10.123)
+ETCD_ENDPOINTS=(192.168.10.121 192.168.10.122 192.168.10.123)
+MASTER_IPS=(192.168.10.121 192.168.10.122)
+
+
+WORKERS=(node-2 node-3)
+WORKER_IPS=(192.168.10.122 192.168.10.123)
+
+
+
+#启动工作节点
+systemctl daemon-reload & systemctl enable kubelet kube-proxy & systemctl restart kubelet kube-proxy
+systemctl stop kubelet kube-proxy
+#启动master
+systemctl daemon-reload & systemctl enable kube-apiserver & systemctl enable kube-controller-manager & systemctl enable kube-scheduler & systemctl restart kube-apiserver & systemctl restart kube-controller-manager & systemctl restart kube-scheduler
+systemctl stop kube-apiserver & systemctl stop kube-controller-manager & systemctl stop kube-scheduler
+
+
+
+
+#查看kubelet日志
+ journalctl -f -u kubelet
+ journalctl -f -u kube-proxy
+
+#修改主机名
+https://www.jb51.net/article/115258.htm
+
+
+#查看calico日志
+kubectl logs -f -n kube-system calico-node-wzmz5   -c calico-node
+=>日志
+2021-12-16 07:35:29.068 [INFO][10] startup/startup.go 416: Hit error connecting to datastore - retry error=Get "https://10.129.0.1:443/api/v1/nodes/foo": x509: certificate is valid for 10.129.0.0, 192.168.10.121, 192.168.10.122, 192.168.10.123, 127.0.0.1, not 10.129.0.1
+2021-12-17 02:14:44.389 [INFO][9] startup/startup.go 416: Hit error connecting to datastore - retry error=Get "https://10.129.0.1:443/api/v1/nodes/foo": x509: certificate is valid for 10.233.0.1, 192.168.10.121, 192.168.10.122, 192.168.10.123, 127.0.0.1, not 10.129.0.1
+
+
+
+
+
+
+#分发work证书
+for instance in ${WORKERS[@]}; do
+  scp ca.pem ${instance}-key.pem ${instance}.pem root@${instance}:~/ssl-work
+done
+
+#分发master证书
+OIFS=$IFS
+IFS=','
+for instance in ${MASTER_IPS}; do
+  scp ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem \
+    service-account-key.pem service-account.pem proxy-client.pem proxy-client-key.pem root@${instance}:~/ssl-work
+done
+IFS=$OIFS
+
+
+
+>>>>>>操作<<<<<<
+#修改coredns配置文件
+kubectl edit cm coredns -n kube-system
+
+#查看所有的pod
+kubectl get pods -A
+
+#查看pod日志
+kubectl logs coredns-5dc5b997f9-2762d -n kube-system
+kubectl get pod coredns-84646c885d-zx2jg --output=yaml --namespace=kube-system
+
+#删除pod
+kubectl delete pod coredns.... -n kube-system
+
+#进入pod内部
+kubectl exec nginx -it -- /bin/bash
+
+#根据标签查询pod
+kubectl get pods -l app=nginx-ds
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#部署问题？
+1、出现
+kubelet.service: Main process exited, code=exited, status=255/n/a
+解决：https://stackoverflow.com/questions/55020845/kubelet-service-main-process-exited-code-exited-status-255-n-a
+sudo swapoff -a关闭交换区
+
+
+root@fabric1:~/kubernetes/deploy_work/coredns# kubectl logs coredns-84646c885d-crqdc -n kube-system
+.:53
+[INFO] plugin/reload: Running configuration MD5 = 5b233a0166923d642fdbca0794b712ab
+CoreDNS-1.6.7
+linux/amd64, go1.13.6, da7f65b
+[FATAL] plugin/loop: Loop (127.0.0.1:43810 -> :53) detected for zone ".", see https://coredns.io/plugins/loop#troubleshooting. Query: "HINFO 32428547029080168.8408051835433588476."
+
+
+[ERROR] plugin/errors: 2 . NS: read udp 127.0.0.1:47124->127.0.0.53:53: i/o timeout
+[ERROR] plugin/errors: 2 . NS: read udp 127.0.0.1:33440->127.0.0.53:53: i/o timeout
+[ERROR] plugin/errors: 2 . NS: read udp 127.0.0.1:42180->127.0.0.53:53: i/o timeout
+[ERROR] plugin/errors: 2 . NS: read udp 127.0.0.1:50729->127.0.0.53:53: i/o timeout
+[ERROR] plugin/errors: 2 . NS: read udp 127.0.0.1:55538->127.0.0.53:53: i/o timeout
+[ERROR] plugin/errors: 2 . NS: read udp 127.0.0.1:57115->127.0.0.53:53: i/o timeout
+[ERROR] plugin/errors: 2 . NS: read udp 127.0.0.1:42727->127.0.0.53:53: i/o timeout
+[ERROR] plugin/errors: 2 . NS: read udp 127.0.0.1:39538->127.0.0.53:53: i/o timeout
+
+
+
+
+
+
+
+
+
+
+  kubectl config set-cluster kubernetes \
+    --certificate-authority=ca.pem \
+    --embed-certs=true \
+    --server=https://127.0.0.1:6443 \
+    --kubeconfig=node-3.kubeconfig
+
+  kubectl config set-credentials system:node:node-3 \
+    --client-certificate=node-3.pem \
+    --client-key=node-3-key.pem \
+    --embed-certs=true \
+    --kubeconfig=node-3.kubeconfig
+
+  kubectl config set-context default \
+    --cluster=kubernetes \
+    --user=system:node:node-3 \
+    --kubeconfig=node-3.kubeconfig
+
+  kubectl config use-context default --kubeconfig=node-3.kubeconfig
+
+
+
+
+
+$ WORKERS="node-2 node-3"
+$ for instance in ${WORKERS}; do
+    scp ${instance}.kubeconfig kube-proxy.kubeconfig ${instance}:~/ssl-work
+done
+
+ scp node-2.kubeconfig kube-proxy.kubeconfig node-2:~/ssl-work
+ scp node-3.kubeconfig kube-proxy.kubeconfig node-3:~/ssl-work
+
+
+for instance in ${MASTERS}; do
+    scp admin.kubeconfig kube-controller-manager.kubeconfig kube-scheduler.kubeconfig ${instance}:~/ssl-work
+done
+
+ scp admin.kubeconfig kube-controller-manager.kubeconfig kube-scheduler.kubeconfig node-1:~/ssl-work
+ scp admin.kubeconfig kube-controller-manager.kubeconfig kube-scheduler.kubeconfig node-2:~/ssl-work
+
+
+scp node-2.kubeconfig kube-proxy.kubeconfig node-2:~/
+scp node-2.kubeconfig kube-proxy.kubeconfig node-3:~/
+
+scp admin.kubeconfig kube-controller-manager.kubeconfig kube-scheduler.kubeconfig node-1
+scp admin.kubeconfig kube-controller-manager.kubeconfig kube-scheduler.kubeconfig node-2
+
+
+
+
+
+IP=192.168.10.121
+IP=192.168.10.122
+
+
+
+
+
+
+cat <<EOF > /etc/kubernetes/kubelet-config.yaml
+kind: KubeletConfiguration
+apiVersion: kubelet.config.k8s.io/v1beta1
+authentication:
+  anonymous:
+    enabled: false
+  webhook:
+    enabled: true
+  x509:
+    clientCAFile: "/etc/kubernetes/ssl/ca.pem"
+authorization:
+  mode: Webhook
+clusterDomain: "cluster.local"
+clusterDNS:
+  - "169.254.25.10"
+podCIDR: "10.200.0.0/16"
+address: ${IP}
+readOnlyPort: 0
+staticPodPath: /etc/kubernetes/manifests
+healthzPort: 10248
+healthzBindAddress: 127.0.0.1
+kubeletCgroups: /systemd/system.slice
+resolvConf: "/etc/resolv.conf"
+runtimeRequestTimeout: "15m"
+kubeReserved:
+  cpu: 200m
+  memory: 512M
+tlsCertFile: "/etc/kubernetes/ssl/node-2.pem"
+tlsPrivateKeyFile: "/etc/kubernetes/ssl/node-2-key.pem"
+EOF
+
+
+
+cat <<EOF > /etc/kubernetes/kubelet-config.yaml
+kind: KubeletConfiguration
+apiVersion: kubelet.config.k8s.io/v1beta1
+authentication:
+  anonymous:
+    enabled: false
+  webhook:
+    enabled: true
+  x509:
+    clientCAFile: "/etc/kubernetes/ssl/ca.pem"
+authorization:
+  mode: Webhook
+clusterDomain: "cluster.local"
+clusterDNS:
+  - "169.254.25.10"
+podCIDR: "10.200.0.0/16"
+address: ${IP}
+readOnlyPort: 0
+staticPodPath: /etc/kubernetes/manifests
+healthzPort: 10248
+healthzBindAddress: 127.0.0.1
+kubeletCgroups: /systemd/system.slice
+resolvConf: "/etc/resolv.conf"
+runtimeRequestTimeout: "15m"
+kubeReserved:
+  cpu: 200m
+  memory: 512M
+tlsCertFile: "/etc/kubernetes/ssl/node-3.pem"
+tlsPrivateKeyFile: "/etc/kubernetes/ssl/node-3-key.pem"
+EOF
+
+
+
+cat <<EOF > /etc/nginx/nginx.conf
+error_log stderr notice;
+
+worker_processes 2;
+worker_rlimit_nofile 130048;
+worker_shutdown_timeout 10s;
+
+events {
+  multi_accept on;
+  use epoll;
+  worker_connections 16384;
+}
+
+stream {
+  upstream kube_apiserver {
+    least_conn;
+    server ${MASTER_IPS[0]}:6443;
+    server ${MASTER_IPS[1]}:6443;
+  }
+
+  server {
+    listen        127.0.0.1:6443;
+    proxy_pass    kube_apiserver;
+    proxy_timeout 10m;
+    proxy_connect_timeout 1s;
+  }
+}
+
+http {
+  aio threads;
+  aio_write on;
+  tcp_nopush on;
+  tcp_nodelay on;
+
+  keepalive_timeout 5m;
+  keepalive_requests 100;
+  reset_timedout_connection on;
+  server_tokens off;
+  autoindex off;
+
+  server {
+    listen 8081;
+    location /healthz {
+      access_log off;
+      return 200;
+    }
+    location /stub_status {
+      stub_status on;
+      access_log off;
+    }
+  }
+}
+EOF
+
+
+
+cfssl gencert \
+  -ca=ca.pem \
+  -ca-key=ca-key.pem \
+  -config=ca-config.json \
+  -hostname=10.233.0.1,192.168.10.121,192.168.10.122,192.168.10.123,127.0.0.1,kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.svc.cluster.local \
+  -profile=kubernetes \
+  kubernetes-csr.json | cfssljson -bare kubernetes
+
+
+
+
+
+scp node-2.kubeconfig kube-proxy.kubeconfig node-2:~/
+scp node-3.kubeconfig kube-proxy.kubeconfig node-3:~/
+
+
+scp admin.kubeconfig kube-controller-manager.kubeconfig kube-scheduler.kubeconfig node-1:~/
+scp admin.kubeconfig kube-controller-manager.kubeconfig kube-scheduler.kubeconfig node-2:~/
+
+
+
+
+
+
+
+
+
+cat <<EOF > /etc/kubernetes/kubelet-config.yaml
+kind: KubeletConfiguration
+apiVersion: kubelet.config.k8s.io/v1beta1
+authentication:
+  anonymous:
+    enabled: false
+  webhook:
+    enabled: true
+  x509:
+    clientCAFile: "/etc/kubernetes/ssl/ca.pem"
+authorization:
+  mode: Webhook
+clusterDomain: "cluster.local"
+clusterDNS:
+  - "169.254.25.10"
+podCIDR: "10.200.0.0/16"
+address: 192.168.10.123
+readOnlyPort: 0
+staticPodPath: /etc/kubernetes/manifests
+healthzPort: 10248
+healthzBindAddress: 127.0.0.1
+kubeletCgroups: /systemd/system.slice
+resolvConf: "/etc/resolv.conf"
+runtimeRequestTimeout: "15m"
+kubeReserved:
+  cpu: 200m
+  memory: 512M
+tlsCertFile: "/etc/kubernetes/ssl/node-3.pem"
+tlsPrivateKeyFile: "/etc/kubernetes/ssl/node-3-key.pem"
+EOF
+
+
+
+
+
+
+
+
+
+
+cat <<EOF > /etc/nginx/nginx.conf
+error_log stderr notice;
+
+worker_processes 2;
+worker_rlimit_nofile 130048;
+worker_shutdown_timeout 10s;
+
+events {
+  multi_accept on;
+  use epoll;
+  worker_connections 16384;
+}
+
+stream {
+  upstream kube_apiserver {
+    least_conn;
+    server ${MASTER_IPS[0]}:6443;
+    server ${MASTER_IPS[1]}:6443;
+  }
+
+  server {
+    listen        127.0.0.1:6443;
+    proxy_pass    kube_apiserver;
+    proxy_timeout 10m;
+    proxy_connect_timeout 1s;
+  }
+}
+
+http {
+  aio threads;
+  aio_write on;
+  tcp_nopush on;
+  tcp_nodelay on;
+
+  keepalive_timeout 5m;
+  keepalive_requests 100;
+  reset_timedout_connection on;
+  server_tokens off;
+  autoindex off;
+
+  server {
+    listen 8081;
+    location /healthz {
+      access_log off;
+      return 200;
+    }
+    location /stub_status {
+      stub_status on;
+      access_log off;
+    }
+  }
+}
+EOF
+
+
+
+
+
+问题：[FATAL] plugin/loop: Loop (127.0.0.1:49443 -> :53) detected for zone ".", see https://coredns.io/plugins/loop#troubleshooting. Query: "HINFO 5688354173550604804.8931943943623004701."
+https://blog.csdn.net/carry1beyond/article/details/88817462
+
+https://coredns.io/plugins/loop/#troubleshooting	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

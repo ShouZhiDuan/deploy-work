@@ -1,0 +1,30 @@
+#修改coredns配置文件
+kubectl edit cm coredns -n kube-system
+
+#查看所有的pod
+kubectl get pods -A
+
+#查看pod日志
+kubectl logs coredns-5dc5b997f9-2762d -n kube-system
+kubectl get pod coredns-84646c885d-zx2jg --output=yaml --namespace=kube-system
+
+#删除pod
+kubectl delete pod coredns.... -n kube-system
+
+#进入pod内部
+kubectl exec nginx -it -- /bin/bash
+
+#根据标签查询pod
+kubectl get pods -l app=nginx-ds
+
+
+#启动工作节点
+systemctl daemon-reload & systemctl enable kubelet kube-proxy & systemctl restart kubelet kube-proxy
+#停止工作节点
+systemctl stop kubelet kube-proxy
+
+
+#启动master
+systemctl daemon-reload & systemctl enable kube-apiserver & systemctl enable kube-controller-manager & systemctl enable kube-scheduler & systemctl restart kube-apiserver & systemctl restart kube-controller-manager & systemctl restart kube-scheduler
+#停止master
+systemctl stop kube-apiserver & systemctl stop kube-controller-manager & systemctl stop kube-scheduler
