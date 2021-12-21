@@ -428,8 +428,9 @@ https://coredns.io/plugins/loop/#troubleshooting
 
 
 
-
-
+for instance in ${ETCDS[@]}; do
+  echo ${instance}
+done
 
 
 
