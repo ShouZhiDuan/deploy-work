@@ -48,7 +48,7 @@
 
 - [kubeadmin方式](https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/)（官网）
 
-  > 主人已实现kube-admin部署方式，部署文档待编写。
+  > 主人已实现kube-admin部署方式，[文档参考](https://github.com/ShouZhiDuan/deploy-work/blob/main/kubernetes/%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/KubeAdmin%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F/kubeadmin%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F.md)。
 
 - [kubespray方式](https://kubernetes.io/zh/docs/setup/production-environment/tools/kubespray/)（官网）
 
