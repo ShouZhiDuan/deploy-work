@@ -568,7 +568,19 @@ EOF
 >
 > kubectl get pods --all-namespaces    #查找所有命名空间下的pod
 
+![image-20211222103623039](C:\Users\dev\AppData\Roaming\Typora\typora-user-images\image-20211222103623039.png)
+
 ## 七、Network
+
+![image-20211222161328995](C:\Users\dev\AppData\Roaming\Typora\typora-user-images\image-20211222161328995.png)
+
+> 通信场景
+>
+> 1、集群内部
+>
+> 2、集群与外部
+>
+> 3、外部与集群
 
 ### 1 同一个Pod中的容器通信
 
@@ -584,9 +596,82 @@ EOF
 
 那如果是通过容器的名称进行通信呢？就需要将所有pod中的容器加入到同一个容器的网络中，我们把该容器称作为pod中的pause container。
 
+> 通信方式
 
+- 同一个POD内的容器可以通过pod的IP同行。
+- 可以为当前pod创建一个service，然后功过这个svc名称来通信。
+- 可以直接localhost通信。
 
+> 案例分析：创建一个pod，在当前pod中同时运行一个nginx和一个tomcat。此时相当于这个pod运行了多个容器。
 
+- 创建一个tomcat_service.yaml
+
+  ```yaml
+  cat > tomcat_service.yaml <<EOF
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: tomcat-svc
+    labels:
+      app: tomcat-svc
+  spec:
+    type: NodePort
+    selector:
+      app: nginx-tomcat
+    ports:
+    #tomcat
+    - name: http
+      port: 8080
+      targetPort: 8080
+    #nginx
+    - name: http2
+      port: 80
+      targetPort: 80
+  EOF
+  ```
+
+- 创建一个nginx_tomcat_pod.yaml
+
+  ```yaml
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: nginx-tomcat
+    labels:
+      app: nginx-tomcat
+  spec:
+    containers:
+    #nginx
+    - name: nginx
+      image: nginx
+      ports:
+      - containerPort: 80
+    #tomcat
+    - name: tomcat
+      image: docker.io/tomcat:8.5-jre8
+      ports:
+      - containerPort: 8080
+  ```
+
+- 查看运行的pod
+
+  ```tex
+  root@node-2:~# kubectl get po -A
+  NAMESPACE   NAME         READY     STATUS     RESTARTS   AGE   IP
+  default   nginx-tomcat    2/2      Running        0      41m  10.200.247.55
+  ```
+
+  `可以看出nginx-tomcat的这个READT(2/2)表示运行了两个容器,而且当前pod分配的IP=10.200.247.55`
+  
+- 进入pod内部
+
+  `kubectl exec -it nginx-tomcat -- /bin/bash`
+  
+  > 1、执行curl 10.200.247.55:80/10.200.247.55:8080都可以访问。
+  >
+  > 2、执行curl tomcat-svc:80/tomcat-svc:8080都可以访问。
+  >
+  > 3、执行curl localhost:80/localhost:8080都可以访问。
 
 
 
