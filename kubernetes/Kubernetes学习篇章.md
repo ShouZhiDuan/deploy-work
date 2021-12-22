@@ -477,9 +477,134 @@ kubectl set image deployment nginx-deployment nginx=nginx:1.9.1
 
 #### (9)查看pod的标签
 
+> 小标签大作用，对于如果熟悉k8s常用资源，比如说常见的集群中的每台 机器node、pod、deployment、service、ingress、configmap等都是可以设置相关的label。这样对于k8s集群在运行过程中通过label来调度相关的资源，从而达到一个灵活的资源共享应用。比如说deployment就是通过选择pod的label从而实现对pod的统一扩容或者缩容等相关操作。
+
 ```powershell
 kubectl get pods -A --show-labels
 ```
+
+![image-20211221200746088](C:\Users\dev\AppData\Roaming\Typora\typora-user-images\image-20211221200746088.png)
+
+## 六、Namespace
+
+> kubectl get pods #未指定namespace
+>
+> kubectl get pods -n kube-system #指定namespace
+
+比较一下，上述两行命令的输入是否一样，发现不一样，是因为Pod属于不同的Namespace。
+
+> 查看一下当前的命名空间：kubectl get namespaces/ns
+>
+> ```
+> # 查看所有的namespace
+> root@node-1:~/kubernetes/deploy_work/test# kubectl get ns
+> NAME              STATUS   AGE
+> default           Active   4d20h
+> kube-node-lease   Active   4d20h
+> kube-public       Active   4d20h
+> kube-system       Active   4d20h
+> ```
+
+其实说白了，命名空间就是为了隔离不同的资源，比如：Pod、Service、Deployment等。可以在输入命令的时候指定命名空间`-n`，如果不指定，则使用默认的命名空间：default。
+
+### 1、创建Namespace
+
+> myns-namespace.yaml
+>
+> ```yaml
+> cat > myns-namespace.yaml <<EOF
+> apiVersion: v1
+> kind: Namespace
+> metadata:
+>   name: myns
+> EOF
+> ```
+
+kubectl apply -f myns-namespace.yaml
+
+kubectl get namespaces/ns
+
+```powershell
+root@node-1:~/kubernetes/deploy_work/test# kubectl get  ns
+NAME              STATUS   AGE
+default           Active   4d20h
+kube-node-lease   Active   4d20h
+kube-public       Active   4d20h
+kube-system       Active   4d20h
+myns              Active   8s
+```
+
+### 2、指定命名空间下的资源
+
+> 比如创建一个pod，属于myns命名空间下
+>
+> vi nginx-pod.yaml
+>
+> kubectl apply -f nginx-pod.yaml 
+
+```yaml
+cat > nginx-pod.yaml <<EOF
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  namespace: myns
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx
+    ports:
+    - containerPort: 80
+EOF
+```
+
+> 查看myns命名空间下的Pod和资源
+>
+> kubectl get pods
+>
+> kubectl get pods -n myns
+>
+> kubectl get all -n myns
+>
+> kubectl get pods --all-namespaces    #查找所有命名空间下的pod
+
+## 七、Network
+
+### 1 同一个Pod中的容器通信
+
+> 接下来就要说到跟Kubernetes网络通信相关的内容
+>
+> 我们都知道K8S最小的操作单位是Pod，先思考一下同一个Pod中多个容器要进行通信
+>
+> 由官网的这段话可以看出，同一个pod中的容器是共享网络ip地址和端口号的，通信显然没问题
+>
+> ```
+> Each Pod is assigned a unique IP address. Every container in a Pod shares the network namespace, including the IP address and network ports. 
+> ```
+
+那如果是通过容器的名称进行通信呢？就需要将所有pod中的容器加入到同一个容器的网络中，我们把该容器称作为pod中的pause container。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
