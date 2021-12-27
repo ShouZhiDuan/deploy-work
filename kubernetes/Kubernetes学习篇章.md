@@ -582,7 +582,7 @@ EOF
 >
 > 3、外部与集群
 
-### 1 同一个Pod中的容器通信
+### 1 Pod中的容器与通信
 
 > 接下来就要说到跟Kubernetes网络通信相关的内容
 >
@@ -673,13 +673,461 @@ EOF
   >
   > 3、执行curl localhost:80/localhost:8080都可以访问。
 
+### 2、Pod与Pod之间通信
 
+> 两个维度：一是集群中同一台机器中的Pod，二是集群中不同机器中的Pod
+>
+> 案例演示：准备两个pod，一个nginx，一个busybox
 
+- nginx_pod.yaml
 
+  ```yml
+  cat > nginx_pod.yaml <<EOF
+  apiVersion: v1
+  kind: Pod
+  metadata:
+   name: nginx-pod
+   labels:
+    app: nginx
+  spec:
+   containers:
+    - name: nginx-container
+      image: nginx
+      ports:
+      - containerPort: 80
+  EOF
+  ```
 
+- busybox_pod.yaml
 
+  ```yaml
+  cat > busybox_pod.yaml <<EOF
+  apiVersion: v1
+  kind: Pod
+  metadata:
+   name: busybox
+   labels:
+     app: busybox
+  spec:
+    containers:
+     - name: busybox
+       image: busybox
+       command: ['sh', '-c', 'echo The app is running! && sleep 3600']
+  EOF
+  ```
 
+![image-20211223162337895](C:\Users\dev\AppData\Roaming\Typora\typora-user-images\image-20211223162337895.png)
 
+```shell
+root@node-2:~# ping 10.200.139.65
+PING 10.200.139.65 (10.200.139.65) 56(84) bytes of data.
+64 bytes from 10.200.139.65: icmp_seq=1 ttl=63 time=0.226 ms
+64 bytes from 10.200.139.65: icmp_seq=2 ttl=63 time=0.113 ms
+64 bytes from 10.200.139.65: icmp_seq=3 ttl=63 time=0.116 ms
+^C
+--- 10.200.139.65 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2042ms
+rtt min/avg/max/mdev = 0.113/0.151/0.226/0.054 ms
+```
+
+```shell
+root@node-2:~# ping 10.200.139.127
+PING 10.200.139.127 (10.200.139.127) 56(84) bytes of data.
+64 bytes from 10.200.139.127: icmp_seq=1 ttl=63 time=0.174 ms
+64 bytes from 10.200.139.127: icmp_seq=2 ttl=63 time=0.111 ms
+64 bytes from 10.200.139.127: icmp_seq=3 ttl=63 time=0.117 ms
+^C
+--- 10.200.139.127 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2046ms
+rtt min/avg/max/mdev = 0.111/0.134/0.174/0.028 ms
+```
+
+> 在同一个集群当中，同一个机器或者不同的机器POD的IP都是可以通的。
+
+### 3、[Service集群内部ClusterIP](https://kubernetes.io/zh/docs/tutorials/kubernetes-basics/expose/expose-intro/)
+
+[SERVICE常见类型](https://kubernetes.io/zh/docs/tutorials/kubernetes-basics/expose/expose-intro/)
+
+> 对于上述的Pod虽然实现了集群内部互相通信，但是Pod是不稳定的，比如通过Deployment管理Pod，随时可能对Pod进行扩缩容，这时候Pod的IP地址是变化的。能够有一个固定的IP，使得集群内能够访问。也就是之前在架构描述的时候所提到的，能够把相同或者具有关联的Pod，打上Label，组成Service。而Service有固定的IP，不管Pod怎么创建和销毁，都可以通过Service的IP进行访问。
+>
+> `Service官网`：<https://kubernetes.io/docs/concepts/services-networking/service/>
+
+案例分析：
+
+> 1、创建whoami-deployment.yaml文件，并且apply
+
+```yaml
+cat > whoami-deployment.yaml <<EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whoami-deployment
+  labels:
+    app: whoami
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: whoami
+  template:
+    metadata:
+      labels:
+        app: whoami
+    spec:
+      containers:
+      - name: whoami
+        image: jwilder/whoami
+        ports:
+        - containerPort: 8000
+EOF
+```
+
+> 2、上述yaml表示会启动3个whoami程序pod
+
+``` sh
+kubectl  apply  -f  whoami-deployment.yaml
+```
+
+![image-20211223165701233](C:\Users\dev\AppData\Roaming\Typora\typora-user-images\image-20211223165701233.png)
+
+> 3、上述whoami-deployment创建一个service
+>
+> 以下是通过expose命令创建service也可以通过yaml文件的方式创建。
+
+```shell
+kubectl expose deployment whoami-deployment #默认创建ClusterIP模式的Service
+```
+
+`yaml方式创建Servcie`
+
+```yaml
+cat > whoami-deployment-service.yaml <<EOF
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  selector:
+    app: MyApp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9376
+  type: Cluster
+EOF
+```
+
+>  4、查看创建的service
+
+```shell
+kubectl get svc
+```
+
+![image-20211223170039559](C:\Users\dev\AppData\Roaming\Typora\typora-user-images\image-20211223170039559.png)
+
+> > 上图可以看出当前创建的whoami-deployment资源对应的service名称为whoami-deployment，类型是个ClusterIP，IP=10.233.73.67。相当于集群内访问curl 10.233.73.67:8000都可以访问到3个pod中的任意一个，service会有分发算法。以下是分别调用三次curl 10.233.73.67:8000展示着不同的结果，说明3个pod都有被调用成功。
+> >
+> > ![image-20211223170738338](C:\Users\dev\AppData\Roaming\Typora\typora-user-images\image-20211223170738338.png)
+
+> 5、查看servcie详情描述
+
+```shell
+kubectl describe svc whoami-deployment
+```
+
+![image-20211223173117341](C:\Users\dev\AppData\Roaming\Typora\typora-user-images\image-20211223173117341.png)
+
+> 6、对whoami扩容成6个，由原来3个变成6个。
+
+```powershell
+kubectl scale deployment whoami-deployment --replicas=6
+```
+
+![image-20211223173642188](C:\Users\dev\AppData\Roaming\Typora\typora-user-images\image-20211223173642188.png)
+
+![image-20211223173717083](C:\Users\dev\AppData\Roaming\Typora\typora-user-images\image-20211223173717083.png)
+
+> 总结：
+>
+> 其实Service存在的意义就是为了Pod的不稳定性，而上述探讨的就是关于Service的一种类型Cluster IP，只能供集群内访问。
+>
+> 以Pod为中心，已经讨论了关于集群内的通信方式，接下来就是探讨集群中的Pod访问外部服务，以及外部服务访问集群中的Pod。
+
+### 4、Service集群外部
+
+#### Service-NodePort模式
+
+> 也是Service的一种类型，可以通过NodePort的方式
+>
+> 说白了，因为外部能够访问到集群的物理机器IP，所以就是在集群中每台物理机器上暴露一个相同的IP，比如32008
+
+案例分析：
+
+> (1)根据whoami-deployment.yaml创建pod
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whoami-deployment
+  labels:
+    app: whoami
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: whoami
+  template:
+    metadata:
+      labels:
+        app: whoami
+    spec:
+      containers:
+      - name: whoami
+        image: jwilder/whoami
+        ports:
+        - containerPort: 8000
+```
+
+> (2)创建NodePort类型的service，名称为whoami-deployment
+
+```shell
+#删除原来已有的SVC
+kubectl delete svc whoami-deployment
+#创建一个NodePort类型的SVC
+kubectl expose deployment whoami-deployment --type=NodePort
+#查看已有的SVC列表
+[root@master-kubeadm-k8s ~]# kubectl get svc
+NAME                TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+kubernetes          ClusterIP   10.96.0.1      <none>        443/TCP          21h
+whoami-deployment   NodePort    10.99.108.82   <none>        8000:32041/TCP   7s
+```
+
+`通过yaml创建NodePort类型的SVC`
+
+[参考](https://www.cnblogs.com/xiangsikai/p/11413913.html)
+
+> 固定范围在kube-apiserver配置文件下参数
+>
+> --service-node-port-range=30000-50000
+
+```yaml
+# 通过配置yaml文件固定端口 
+cat > who-service.yaml <<EOF
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  selector:
+    app: A
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+      # 固定端口数值，必须是配置文件范围内
+      nodePort: 30001
+  # 网络类型
+  type: NodePort
+EOF
+```
+
+> (3)注意上述的端口30001，实际上就是暴露在集群中物理机器上的端口
+
+```shell
+lsof -i tcp:30001
+netstat -ntlp|grep 30001
+```
+
+> (4)浏览器通过任意一个worker物理机器的IP访问
+
+```shell
+http://192.168.10.122:30001
+curl 192.168.10.122:30001
+```
+
+> (5)NodePort缺点
+>
+> NodePort虽然能够实现外部访问Pod的需求，但是真的好吗？其实不好，占用了各个物理主机上的端口。
+
+#### Service-LoadBalance模式
+
+> 通常需要第三方云提供商支持，有约束性，用的比较少，了解下有这种情况的存在。
+
+#### Ingress模式
+
+[Ingress官网参考](https://kubernetes.io/docs/concepts/services-networking/ingress/)
+
+> 1、设置node的label。
+
+```yaml
+kubectl label node <<node-name>> name=ingress
+```
+
+> 2、使用HostPort方式运行，需要增加配置。
+
+```properties
+hostNetwork: true
+```
+
+> 3、搜索nodeSelector，并且要确保node-name节点上的80和443端口没有被占用。
+
+```powershell
+kubectl apply -f mandatory.yaml
+```
+
+> 4、查看命名空间ingress-nginx所有资源。
+
+```yaml
+kubectl get all -n ingress-nginx
+```
+
+> 5、查看node-name的80和443端口
+
+```powershell
+lsof -i tcp:80
+lsof -i tcp:443
+```
+
+> 6、ingress配置文件，见同级目录nginx-ingress下的mandatory.yaml文件
+>
+> 查看ingress-nginx对外暴露的端口：
+>
+> kubectl describe pod nginx-ingress-controller-665997d7f8-qkxbw -n ingress-nginx
+
+```tex
+Name:         nginx-ingress-controller-665997d7f8-qkxbw
+Namespace:    ingress-nginx
+Priority:     0
+Node:         node-3/192.168.10.123
+Start Time:   Mon, 27 Dec 2021 16:03:33 +0800
+Labels:       app.kubernetes.io/name=ingress-nginx
+              app.kubernetes.io/part-of=ingress-nginx
+              pod-template-hash=665997d7f8
+Annotations:  prometheus.io/port: 10254
+              prometheus.io/scrape: true
+Status:       Running
+IP:           192.168.10.123
+IPs:
+  IP:           192.168.10.123
+Controlled By:  ReplicaSet/nginx-ingress-controller-665997d7f8
+Containers:
+  nginx-ingress-controller:
+    Container ID:  containerd://06c17a53a5d4a2b4eac2dacb3a89f4e8e2e0b4d6c9570809a010f80ed50f2ae7
+    Image:         quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.26.1
+    Image ID:      sha256:30dc9b22ec8c5702474a63302d688cbbee9d6232cec81fa2491a794e55b138f4
+    Ports:         80/TCP, 443/TCP
+    Host Ports:    80/TCP, 443/TCP
+    Args:
+      /nginx-ingress-controller
+      --configmap=$(POD_NAMESPACE)/nginx-configuration
+      --tcp-services-configmap=$(POD_NAMESPACE)/tcp-services
+      --udp-services-configmap=$(POD_NAMESPACE)/udp-services
+      --publish-service=$(POD_NAMESPACE)/ingress-nginx
+      --annotations-prefix=nginx.ingress.kubernetes.io
+      #ingress nginx暴露端口
+      --http-port=8080
+      --https-port=8443
+    State:          Running
+      Started:      Mon, 27 Dec 2021 16:03:34 +0800
+    Ready:          True
+    Restart Count:  0
+    Liveness:       http-get http://:10254/healthz delay=10s timeout=10s period=10s #success=1 #failure=3
+    Readiness:      http-get http://:10254/healthz delay=0s timeout=10s period=10s #success=1 #failure=3
+    Environment:
+      POD_NAME:       nginx-ingress-controller-665997d7f8-qkxbw (v1:metadata.name)
+      POD_NAMESPACE:  ingress-nginx (v1:metadata.namespace)
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from nginx-ingress-serviceaccount-token-slsb7 (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  nginx-ingress-serviceaccount-token-slsb7:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  nginx-ingress-serviceaccount-token-slsb7
+    Optional:    false
+QoS Class:       BestEffort
+Node-Selectors:  app=ingress
+                 kubernetes.io/os=linux
+Tolerations:     node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                 node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  30m   default-scheduler  Successfully assigned ingress-nginx/nginx-ingress-controller-665997d7f8-qkxbw to node-3
+  Normal  Pulled     30m   kubelet            Container image "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.26.1" already present on machine
+  Normal  Created    30m   kubelet            Created container nginx-ingress-controller
+  Normal  Started    30m   kubelet            Started container nginx-ingress-controller
+
+```
+
+> 7、案例分析
+
+创建一个service、和一个tomcat。最后让ingress-nginx对外暴露service。
+
+`tomcat-and-servcie.yaml`
+
+```yaml
+cat > tomcat-and-servcie.yaml <<EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tomcat-deployment
+  labels:
+    app: tomcat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tomcat
+  template:
+    metadata:
+      labels:
+        app: tomcat
+    spec:
+      containers:
+      - name: tomcat
+        image: tomcat
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tomcat-service
+spec:
+  ports:
+  - port: 8686
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: tomcat
+EOF
+```
+
+`ingress-tomcat-and-servcie.yaml`
+
+```yaml
+cat > ingress-tomcat-and-servcie.yaml <<EOF
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+spec:
+  rules:
+  - host: tomcat.dsz.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: tomcat-service
+          servicePort: 8686
+ EOF
+```
 
 
 
