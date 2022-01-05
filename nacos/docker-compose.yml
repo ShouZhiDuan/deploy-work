@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  nacos:
+    image: nacos/nacos-server:latest
+    container_name: nacos
+    environment:
+      - PREFER_HOST_MODE=hostname
+      - MODE=standalone
+    volumes:
+      - ./nacos/standalone-logs/:/home/nacos/logs
+      - ./nacos/custom.properties:/home/nacos/init.d/custom.properties
+    ports:
+      - "8848:8848"
