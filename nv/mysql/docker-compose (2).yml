@@ -1,0 +1,25 @@
+version: '3'
+networks:
+  localnet:
+    external:
+      name: localnet
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    networks:
+      - localnet
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
+    command: --init-file /data/application/init.sql #设置数据库启动加载脚本
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Wentiliangkaihua@2021 #设置root帐号密码
+    networks:
+      - localnet
+    ports:
+      - 3306:3306
+    volumes:
+      - ./data/db:/var/lib/mysql 
+      - ./conf/my.cnf:/etc/mysql/conf.d/my.cnf 
+      - ./log:/var/log/mysql 
+      - ./init.sql:/data/application/init.sql
