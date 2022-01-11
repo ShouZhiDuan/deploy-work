@@ -14,6 +14,7 @@ services:
       - .env
     ports:
       - ${STUDY_SERVER_PORT}:${STUDY_SERVER_PORT} 
+      - ${STUDY_SERVER_DEBUG_PORT}:5005
     volumes:
       - ./orders:/medusa_study/OptionAPIs/orders
       - /tmp:/tmp 
