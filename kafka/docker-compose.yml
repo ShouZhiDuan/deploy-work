@@ -1,0 +1,43 @@
+version: '3'
+
+networks:
+  localnet:
+    external:
+      name: localnet
+      
+services: 
+  zookeeper:
+    image: 'bitnami/zookeeper:latest'
+    container_name: zookeeper
+    ports:
+      - "2281:2181"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - localnet
+
+  kafka:
+    image: 'bitnami/kafka:latest'
+    container_name: kafka
+    volumes:
+      - /etc/localtime:/etc/localtime
+    ports:
+      - "9192:9192"
+    depends_on:
+      - zookeeper
+    networks:
+      - localnet
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181      
+      - KAFKA_LOG_RETENTION_HOURS=120
+      - KAFKA_MESSAGE_MAX_BYTES=10000000
+      - KAFKA_REPLICA_FETCH_MAX_BYTES=10000000
+      - KAFKA_GROUP_MAX_SESSION_TIMEOUT_MS=60000
+      - KAFKA_NUM_PARTITIONS=2
+      - KAFKA_DELETE_RETENTION_MS=1000
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      #https://www.jianshu.com/p/26495e334613关于端口的配置
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://0.0.0.0:9192
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9192
+      - ALLOW_PLAINTEXT_LISTENER=yes
